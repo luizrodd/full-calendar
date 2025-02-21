@@ -230,3 +230,18 @@ body {
   text-overflow: ellipsis;
   cursor: pointer;
 }
+
+.week-event, .day-event {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  background-color: rgba(255, 0, 0, 0.5); /* Estilo de teste */
+  z-index: 10; /* Garante que o evento esteja na frente */
+}
