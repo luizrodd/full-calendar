@@ -1,0 +1,92 @@
+<div class="calendar-container">
+  <header class="calendar-header">
+    <div class="calendar-nav">
+      <button class="today-btn" (click)="goToToday()">Hoje</button>
+      <div class="nav-arrows">
+        <button class="nav-arrow" (click)="previous()">&#9664;</button>
+        <button class="nav-arrow" (click)="next()">&#9654;</button>
+      </div>
+      <h2 class="current-month">{{ getCurrentDateDisplay() }}</h2>
+      <div class="view-selector">
+        <button
+          *ngFor="let v of ['month', 'week', 'day']"
+          class="view-btn"
+          [class.active]="view === v"
+          (click)="changeView(v)">
+          {{ getViewName(v) }}
+        </button>
+      </div>
+    </div>
+    <div class="tools">
+      <button class="tool-btn">&#128269;</button>
+      <button class="tool-btn">&#9432;</button>
+      <button class="tool-btn">&#9881;</button>
+    </div>
+  </header>
+
+  <div class="calendar-grid" *ngIf="view === 'month'">
+    <div *ngFor="let day of weekDays" class="weekday-header">
+      {{ day }}
+    </div>
+    <div *ngFor="let day of calendarDays"
+         class="calendar-day"
+         [class.other-month]="day.otherMonth"
+         [class.today]="isToday(day.date)">
+      <div class="day-number">{{ day.date.getDate() }}</div>
+      <div *ngFor="let event of getEventsForDate(day.date)"
+           class="event"
+           [class]="event.type">
+        {{ event.title }}
+      </div>
+    </div>
+  </div>
+
+  <div class="week-view" *ngIf="view === 'week'">
+    <div class="time-column">
+      <div class="weekday-header"></div>
+      <div *ngFor="let hour of hours" class="time-slot">
+        {{ hour }}:00
+      </div>
+    </div>
+    <div *ngFor="let date of weekDates" class="day-column">
+      <div class="weekday-header">
+        {{ date.toLocaleDateString('pt-BR', { weekday: 'short' }) }}
+        <div [class.today]="isToday(date)">
+          {{ date.getDate() }}
+        </div>
+      </div>
+      <div *ngFor="let hour of hours" class="day-slot">
+        <div *ngFor="let event of getEventsForDateTime(date, hour)"
+             class="week-event"
+             [class]="event.type"
+             [style.top.px]="getEventTop(event)"
+             [style.height.px]="getEventHeight(event)">
+          {{ event.title }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-view" *ngIf="view === 'day'">
+    <div class="time-column">
+      <div class="weekday-header"></div>
+      <div *ngFor="let hour of hours" class="time-slot">
+        {{ hour }}:00
+      </div>
+    </div>
+    <div class="day-column">
+      <div class="weekday-header">
+        {{ currentDate.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }) }}
+      </div>
+      <div *ngFor="let hour of hours" class="day-slot">
+        <div *ngFor="let event of getEventsForDateTime(currentDate, hour)"
+             class="day-event"
+             [class]="event.type"
+             [style.top.px]="getEventTop(event)"
+             [style.height.px]="getEventHeight(event)">
+          {{ event.title }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
